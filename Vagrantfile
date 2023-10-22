@@ -64,6 +64,7 @@ Vagrant.configure("2") do |config|
     vb.memory = "1024"
     vb.cpus = "2"
   end
+
   #
   # View the documentation for the provider you are using for more
   # information on available options.
@@ -80,13 +81,13 @@ Vagrant.configure("2") do |config|
   config.vm.define "master" do |subconfig|
     subconfig.vm.box = "ubuntu/focal64"
     subconfig.vm.hostname = "master"
-    subconfig.vm.network :private_network, type: "dhcp"
+    subconfig.vm.network :private_network, ip: "192.168.20.5"
   end
 
   config.vm.define "slave" do |subconfig|
     subconfig.vm.box = "ubuntu/focal64"
     subconfig.vm.hostname = "slave"
-    subconfig.vm.network :private_network, type: "dhcp"
+    subconfig.vm.network :private_network, ip: "192.168.20.6"
   end
 
   # Provisioning script
@@ -98,19 +99,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get install -y avahi-daemon libnss-mdns
   SHELL
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   sudo useradd altschool
-  #   sudo usermod -aG altschool 
-  # SHELL
-  config.vm.provision "shell", inline: <<-SHELL
-    sudo apt update
-    sudo apt -y upgrade
-    sudo apt install apache2
-    sudo apt -y install software-properties-common
-    sudo apt install php libapache2-mod-php -y
-    sudo apt install mysql-server -y
-    sudo systemctl start mysql.service
-    sudo systemctl restart apache2
-    sudo systemctl status apache2
-  SHELL
+ 
 end
